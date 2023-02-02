@@ -1,5 +1,6 @@
 using UnityEditor.Rendering;
 using UnityEngine;
+using UnityEngine.Windows;
 
 namespace InexperiencedDeveloper
 {
@@ -14,6 +15,8 @@ namespace InexperiencedDeveloper
         [SerializeField] private float m_RotationSpeed = 100;
 
         private float m_Speed;
+        private float m_AnimMultiplier;
+        private float m_LastHorizontal, m_LastVertical;
 
         private float m_LastLookRot;
         private float m_LastCamRot;
@@ -37,9 +40,15 @@ namespace InexperiencedDeveloper
         private void Update()
         {
             if (Input.Sprint)
+            {
                 m_Speed = m_RunSpeed;
+                m_AnimMultiplier = 1;
+            }
             else
+            {
                 m_Speed = m_WalkSpeed;
+                m_AnimMultiplier = 0.3f;
+            }
             Move();
             Rotate();
         }
@@ -49,8 +58,31 @@ namespace InexperiencedDeveloper
             Vector2 input = Input.Move.normalized;
             Vector3 move = transform.right * input.x + transform.forward * input.y;
             m_Controller.Move(move * m_Speed * Time.deltaTime);
-            m_Animator.SetFloat("horizontal", move.x);
-            m_Animator.SetFloat("vertical", move.z);
+            Animate(input);
+        }
+
+        private void Animate(Vector2 input)
+        {
+            float targetHorizontal = input.x * m_AnimMultiplier;
+            if(targetHorizontal > m_LastHorizontal)
+            {
+                m_LastHorizontal += Time.deltaTime;
+            }
+            else if(targetHorizontal < m_LastHorizontal)
+            {
+                m_LastHorizontal -= Time.deltaTime;
+            }
+            float targetVertical = input.y * m_AnimMultiplier;
+            if (targetVertical > m_LastVertical)
+            {
+                m_LastVertical += Time.deltaTime;
+            }
+            else if (targetVertical < m_LastVertical)
+            {
+                m_LastVertical -= Time.deltaTime;
+            }
+            m_Animator.SetFloat("horizontal", m_LastHorizontal);
+            m_Animator.SetFloat("vertical", m_LastVertical);
         }
 
         private void Rotate()
