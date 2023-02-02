@@ -49,8 +49,8 @@ namespace InexperiencedDeveloper
             Vector2 input = Input.Move.normalized;
             Vector3 move = transform.right * input.x + transform.forward * input.y;
             m_Controller.Move(move * m_Speed * Time.deltaTime);
-            m_Animator.SetFloat("horizontal", move.x);
-            m_Animator.SetFloat("vertical", move.z);
+            m_Animator.SetFloat("horizontal", input.x);
+            m_Animator.SetFloat("vertical", input.y);
         }
 
         private void Rotate()
