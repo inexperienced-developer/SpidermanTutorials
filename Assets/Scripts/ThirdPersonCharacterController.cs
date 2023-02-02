@@ -32,14 +32,11 @@ namespace InexperiencedDeveloper
             m_Animator = GetComponent<Animator>();
             m_LastLookRot = transform.eulerAngles.y;
             m_LastCamRot = Camera.main.transform.eulerAngles.y;
+            m_Speed = m_RunSpeed;
         }
 
         private void Update()
         {
-            if (Input.Sprint)
-                m_Speed = m_RunSpeed;
-            else
-                m_Speed = m_WalkSpeed;
             Move();
             Rotate();
         }
