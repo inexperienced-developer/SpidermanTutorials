@@ -13,6 +13,9 @@
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
 
+#Asset ignore folder
+/[Aa]ssets/[Ii]gnore/
+
 # Uncomment this line if you wish to ignore the asset store tools plugin
 # /[Aa]ssets/AssetStoreTools*
 
@@ -57,4 +60,7 @@ sysinfo.txt
 
 # Crashlytics generated file
 crashlytics-build.properties
+
+#For blendspace tutorial only
+/[Aa]ssets/[Mm]ixamo/[Ww]ebswing
 
