@@ -17,6 +17,7 @@ namespace InexperiencedDeveloper
         private float m_Speed;
         private float m_AnimMultiplier;
         private float m_LastHorizontal, m_LastVertical;
+        [SerializeField] private float m_BlendSpeed = 2;
 
         private float m_LastLookRot;
         private float m_LastCamRot;
@@ -64,23 +65,31 @@ namespace InexperiencedDeveloper
         private void Animate(Vector2 input)
         {
             float targetHorizontal = input.x * m_AnimMultiplier;
-            if(targetHorizontal > m_LastHorizontal)
+            float blend = Time.deltaTime * m_BlendSpeed;
+            if (Mathf.Abs(targetHorizontal - m_LastHorizontal) < 0.1f)
+                m_LastHorizontal = targetHorizontal;
+            if (targetHorizontal > m_LastHorizontal)
             {
-                m_LastHorizontal += Time.deltaTime;
+                m_LastHorizontal += blend;
             }
             else if(targetHorizontal < m_LastHorizontal)
             {
-                m_LastHorizontal -= Time.deltaTime;
+                m_LastHorizontal -= blend;
             }
             float targetVertical = input.y * m_AnimMultiplier;
+            if (Mathf.Abs(targetVertical - m_LastVertical) < 0.1f)
+                m_LastVertical = targetVertical;
             if (targetVertical > m_LastVertical)
-            {
-                m_LastVertical += Time.deltaTime;
+                {
+                m_LastVertical += blend;
             }
             else if (targetVertical < m_LastVertical)
             {
-                m_LastVertical -= Time.deltaTime;
+                m_LastVertical -= blend;
             }
+
+            Mathf.Clamp(m_LastHorizontal, 0, targetHorizontal);
+            Mathf.Clamp(m_LastVertical, 0, targetVertical);
             m_Animator.SetFloat("horizontal", m_LastHorizontal);
             m_Animator.SetFloat("vertical", m_LastVertical);
         }
